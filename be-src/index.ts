@@ -1,7 +1,7 @@
 import { Model, DataTypes, where, STRING } from "sequelize";
 import { sequelize } from "./models/conn";
 import * as express from "express";
-
+import * as path from "path";
 import { index } from "./lib/algolia";
 import * as jwt from "jsonwebtoken";
 import {
@@ -177,6 +177,11 @@ app.post("/user/edit", authMiddleware, async (req, res) => {
 	const updatePass = await updateAuth(userId, req.body);
 
 	res.json(updatedData);
+});
+const staticDirPath = path.resolve(__dirname, "../");
+app.use(express.static(staticDirPath));
+app.get("*", function (req, res) {
+	res.sendfile(staticDirPath + "/index.html");
 });
 
 app.listen(port, () => {
