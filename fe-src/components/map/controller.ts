@@ -1,4 +1,4 @@
-const mapboxgl = require("../../lib/mapbox.js");
+import * as mapboxgl from "mapbox-gl";
 import { MAPBOX_TOKEN } from "../../lib/mapobox";
 import { state } from "../../state";
 //inicia el mapa de mapbox
@@ -7,6 +7,8 @@ export async function initMap(mapa) {
 	return new mapboxgl.Map({
 		container: mapa,
 		style: "mapbox://styles/mapbox/streets-v11",
+		center: [-58.3712, -34.6083],
+		zoom: 8,
 	});
 }
 //crea un marcador

@@ -1,6 +1,5 @@
 let pictureURL = require("url:../img/picture.png");
-
-const mapboxgl = require("../../lib/mapbox.js");
+import * as mapboxgl from "mapbox-gl";
 
 import { initMap } from "./controller";
 
@@ -13,19 +12,19 @@ import { state } from "../../state";
 // import mapboxgl from "mapbox-gl";
 const mapboxClient = new MapboxClient(MAPBOX_TOKEN);
 export function init() {
-  class PutLocation extends HTMLElement {
-    constructor() {
-      super();
-      this.render();
-    }
-    render() {
-      const shadow = this.attachShadow({ mode: "open" });
-      const map = document.createElement("div");
+	class PutLocation extends HTMLElement {
+		constructor() {
+			super();
+			this.render();
+		}
+		render() {
+			const shadow = this.attachShadow({ mode: "open" });
+			const map = document.createElement("div");
 
-      const style = document.createElement("style");
-      map.className = "map-container";
+			const style = document.createElement("style");
+			map.className = "map-container";
 
-      map.innerHTML = `
+			map.innerHTML = `
       
       <div id="maps"  class="mapa" ></div>
       <form class="search-form">
@@ -34,7 +33,7 @@ export function init() {
     </form>
    
     `;
-      style.innerHTML = `
+			style.innerHTML = `
       .input{
         font-family: "Indie Flower";
         font-size:30px;
@@ -150,69 +149,69 @@ export function init() {
 }
   `;
 
-      shadow.appendChild(map);
+			shadow.appendChild(map);
 
-      shadow.appendChild(style);
-      const mapa = shadow.querySelector("#maps");
-      const form = shadow.querySelector(".search-form");
+			shadow.appendChild(style);
+			const mapa = shadow.querySelector("#maps");
+			const form = shadow.querySelector(".search-form");
 
-      initMap(mapa).then((res) => {
-        this.initSearchForm(shadow, res);
-      });
-      shadow.addEventListener("awesome", (res: any) => {
-        const evento = new CustomEvent(`change`, {
-          detail: {
-            text: res.detail.text,
-            search: res.detail.search,
-          },
-        });
-        this.dispatchEvent(evento);
-      });
-    }
+			initMap(mapa).then((res) => {
+				this.initSearchForm(shadow, res);
+			});
+			shadow.addEventListener("awesome", (res: any) => {
+				const evento = new CustomEvent(`change`, {
+					detail: {
+						text: res.detail.text,
+						search: res.detail.search,
+					},
+				});
+				this.dispatchEvent(evento);
+			});
+		}
 
-    initSearchForm(shadow, mapa) {
-      let loc = [];
-      const form = shadow.querySelector(".search-form");
+		initSearchForm(shadow, mapa) {
+			let loc = [];
+			const form = shadow.querySelector(".search-form");
 
-      form.addEventListener("submit", (e: any) => {
-        e.preventDefault();
+			form.addEventListener("submit", (e: any) => {
+				e.preventDefault();
 
-        mapboxClient.geocodeForward(
-          e.target.q.value,
-          {
-            country: "ar",
-            autocomplete: true,
-            language: "es",
-          },
-          function (err, data, res) {
-            if (!err) {
-              const firstResult = data.features[0];
-              let lat = firstResult.geometry.coordinates[0];
-              let lng = firstResult.geometry.coordinates[1];
+				mapboxClient.geocodeForward(
+					e.target.q.value,
+					{
+						country: "ar",
+						autocomplete: true,
+						language: "es",
+					},
+					function (err, data, res) {
+						if (!err) {
+							const firstResult = data.features[0];
+							let lat = firstResult.geometry.coordinates[0];
+							let lng = firstResult.geometry.coordinates[1];
 
-              const marker = new mapboxgl.Marker({ draggable: true })
-                .setLngLat(firstResult.geometry.coordinates)
+							const marker = new mapboxgl.Marker({ draggable: true })
+								.setLngLat(firstResult.geometry.coordinates)
 
-                .addTo(mapa);
+								.addTo(mapa);
 
-              mapa.setCenter(firstResult.geometry.coordinates);
-              mapa.setZoom(14);
+							mapa.setCenter(firstResult.geometry.coordinates);
+							mapa.setZoom(14);
 
-              cs.pet.lat = lat;
-              cs.pet.lng = lng;
-              cs.pet.search = data.query.toString();
-              function onDragEnd() {
-                const lngLat = marker.getLngLat();
-                cs.pet.lat = lngLat.lat;
-                cs.pet.lng = lngLat.lng;
-              }
+							cs.pet.lat = lat;
+							cs.pet.lng = lng;
+							cs.pet.search = data.query.toString();
+							function onDragEnd() {
+								const lngLat = marker.getLngLat();
+								cs.pet.lat = lngLat.lat;
+								cs.pet.lng = lngLat.lng;
+							}
 
-              marker.on("dragend", onDragEnd);
-            }
-          }
-        );
-      });
-    }
-  }
-  customElements.define("put-location", PutLocation);
+							marker.on("dragend", onDragEnd);
+						}
+					}
+				);
+			});
+		}
+	}
+	customElements.define("put-location", PutLocation);
 }
