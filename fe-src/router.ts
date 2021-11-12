@@ -6,45 +6,43 @@ import { reportedPet } from "./pages/reportedPets";
 import { inputPassword } from "./pages/password";
 import { createUser } from "./pages/createUser";
 import { reportPet } from "./pages/reportPet";
-import { nearbyPet } from "./pages/nearbyPets";
 
 export function initRouter(container: Element) {
-  function goTo(path) {
-    history.pushState({}, "", path);
-    handleRoute(path);
-  }
+	function goTo(path) {
+		history.pushState({}, "", path);
+		handleRoute(path);
+	}
 
-  function handleRoute(route) {
-    const contenedorEl = document.querySelector(".contenedor");
-    const routes = [
-      {
-        path: /\//,
-        component: initWelcome,
-      },
+	function handleRoute(route) {
+		const contenedorEl = document.querySelector(".contenedor");
+		const routes = [
+			{
+				path: /\//,
+				component: initWelcome,
+			},
 
-      { path: /\/create-user/, component: createUser },
-      { path: /\/edit-user/, component: editUser },
-      { path: /\/welcome/, component: initWelcome },
-      { path: /\/edit-pet/, component: editPet },
-      { path: /\/input-email/, component: inputEmail },
-      { path: /\/reported-pet/, component: reportedPet },
-      { path: /\/input-password/, component: inputPassword },
-      { path: /\/report-pet/, component: reportPet },
-      { path: /\/nearby-pet/, component: nearbyPet },
-    ];
-    for (const i of routes) {
-      if (i.path.test(route)) {
-        const el = i.component({ goTo: goTo });
+			{ path: /\/create-user/, component: createUser },
+			{ path: /\/edit-user/, component: editUser },
+			{ path: /\/welcome/, component: initWelcome },
+			{ path: /\/edit-pet/, component: editPet },
+			{ path: /\/input-email/, component: inputEmail },
+			{ path: /\/reported-pet/, component: reportedPet },
+			{ path: /\/input-password/, component: inputPassword },
+			{ path: /\/report-pet/, component: reportPet },
+		];
+		for (const i of routes) {
+			if (i.path.test(route)) {
+				const el = i.component({ goTo: goTo });
 
-        if (container.firstChild) {
-          container.firstChild.remove();
-        }
-        container.appendChild(el);
-      }
-    }
-  }
-  handleRoute(location.pathname);
-  window.onpopstate = function () {
-    handleRoute(location.pathname);
-  };
+				if (container.firstChild) {
+					container.firstChild.remove();
+				}
+				container.appendChild(el);
+			}
+		}
+	}
+	handleRoute(location.pathname);
+	window.onpopstate = function () {
+		handleRoute(location.pathname);
+	};
 }

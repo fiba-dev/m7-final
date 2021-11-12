@@ -1,3 +1,4 @@
+import "dotenv/config";
 import * as sgMail from "@sendgrid/mail";
 // import sgMail = require('@sendgrid/mail');
 

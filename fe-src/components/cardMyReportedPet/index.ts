@@ -4,20 +4,21 @@ const imagenURL = require("url:../img/picture.png");
 const lapizURL = require("url:../img/lapiz.png");
 
 export function init() {
-  class cardReportedPet extends HTMLElement {
-    constructor() {
-      super();
-      this.render();
-    }
+	class cardReportedPet extends HTMLElement {
+		constructor() {
+			super();
+			this.render();
+		}
 
-    render() {
-      const shadow = this.attachShadow({ mode: "open" });
-      const div = document.createElement("div");
+		render() {
+			const shadow = this.attachShadow({ mode: "open" });
+			const div = document.createElement("div");
 
-      const style = document.createElement("style");
+			const style = document.createElement("style");
 
-      div.innerHTML = `
+			div.innerHTML = `
         <div class="contenedor"></div>
+        <h1 class="no__pets"></h1>
          <template id="card-template">
          <div class="card">
         <a><img class="imagen" src=${imagenURL}></a>
@@ -32,7 +33,13 @@ export function init() {
         </template>
       
       `;
-      style.innerHTML = ` 
+			style.innerHTML = ` 
+      .no__pets{
+        font-family: "Indie Flower";
+        font-size: 60px;
+        color:rgb(241, 196, 255 );
+        text-align: center;
+      }
         .card{
             width:335px;
             height:234px;
@@ -64,27 +71,33 @@ export function init() {
 
 
         `;
-      const cs = state.getState();
-      const listaPets = cs.pets;
-      shadow.appendChild(div);
-      shadow.appendChild(style);
-      listaPets.forEach((element) => {
-        añadirElementos(div, element);
-      });
+			const cs = state.getState();
+			const listaPets = cs.pets;
+			shadow.appendChild(div);
+			shadow.appendChild(style);
+			const noPetsEl = shadow.querySelector(".no__pets");
+			if (listaPets.length < 1) {
+				noPetsEl.textContent = "NO HAY PETS REPORTADAS";
+			} else {
+				noPetsEl.textContent = "";
+				listaPets.forEach((element) => {
+					añadirElementos(div, element);
+				});
+			}
 
-      const edit = shadow.querySelectorAll(".imagenLapiz");
-      edit.forEach((element) => {
-        element.addEventListener("click", (res) => {
-          const event = new CustomEvent("edit", {
-            detail: {
-              id: element.id,
-            },
-          });
-          this.dispatchEvent(event);
-        });
-      });
-    }
-  }
+			const edit = shadow.querySelectorAll(".imagenLapiz");
+			edit.forEach((element) => {
+				element.addEventListener("click", (res) => {
+					const event = new CustomEvent("edit", {
+						detail: {
+							id: element.id,
+						},
+					});
+					this.dispatchEvent(event);
+				});
+			});
+		}
+	}
 
-  customElements.define("reported-pet", cardReportedPet);
+	customElements.define("reported-pet", cardReportedPet);
 }

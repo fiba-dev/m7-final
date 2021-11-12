@@ -1,4 +1,5 @@
 import { Model, DataTypes, where, STRING } from "sequelize";
+import * as dotenv from "dotenv";
 import { sequelize } from "./models/conn";
 import * as express from "express";
 import * as path from "path";
@@ -40,6 +41,8 @@ app.use(express.static("dist"));
 const port = process.env.PORT || 3003;
 const secret = "hola a todos";
 app.use(express.json({ limit: "50mb" }));
+
+const result = dotenv.config();
 
 //email check---------
 
@@ -91,9 +94,7 @@ function authMiddleware(req, res, next) {
 }
 
 //Pets Cercanas---------
-app.get("/pets-cerca-de", authMiddleware, async (req, res) => {
-	console.log("petcercanas reqquery", req.query);
-
+app.get("/pets-cerca-de", async (req, res) => {
 	let hits = await searchPet(req.query);
 
 	let pets = await MascotasCercanas(hits);
@@ -101,15 +102,15 @@ app.get("/pets-cerca-de", authMiddleware, async (req, res) => {
 	res.json(pets);
 });
 //report info de pet---------
-app.post("/user/report-info", authMiddleware, async (req, res) => {
+app.post("/user/report-info", async (req, res) => {
 	const { id } = req.body;
 
 	const pet: any = await findPet(id);
 
 	const userEmail: any = await findEmailUserById(pet.userId);
 
-	if (userEmail.email) {
-		const email = sendEmailPetInfo(userEmail.email, req.body);
+	if (userEmail) {
+		const email = sendEmailPetInfo(userEmail, req.body);
 		res.json(email);
 	} else {
 		res.json("EMAIL NOT FOUND");
@@ -126,7 +127,6 @@ app.get("/me/reported", authMiddleware, async (req, res) => {
 
 //reportar mascota---------
 app.post("/user/report", authMiddleware, async (req, res) => {
-	console.log("entro al report");
 	if (!req.body) {
 		res.status(400).json({
 			message: "faltan datos en el body",
@@ -136,9 +136,7 @@ app.post("/user/report", authMiddleware, async (req, res) => {
 	const petReported = await reportPet(userId, req.body);
 	const pet = await algoliaPet(petReported);
 
-	await index.saveObject(pet).catch((error) => {
-		console.log("Error algolia", error);
-	});
+	await index.saveObject(pet).catch((error) => {});
 
 	res.json(true);
 });
@@ -165,8 +163,6 @@ app.delete("/user/pet", authMiddleware, async (req, res) => {
 });
 //Editar usuario---------
 app.post("/user/edit", authMiddleware, async (req, res) => {
-	console.log("entro a profile");
-
 	if (!req.body) {
 		res.status(400).json({
 			message: "faltan datos en el body",

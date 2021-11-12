@@ -5,30 +5,30 @@ import { abrirCerrarVentanas } from "./controller";
 
 const garraURL = require("url:../img/garra.png");
 export function init() {
-  const cs = state.getState();
+	const cs = state.getState();
 
-  class Headercustom extends HTMLElement {
-    constructor() {
-      super();
+	class Headercustom extends HTMLElement {
+		constructor() {
+			super();
 
-      this.render();
-    }
-    render() {
-      const shadow = this.attachShadow({ mode: "open" });
-      const div = document.createElement("header");
-      let login = "";
-      let email = "";
-      if (cs.email == "") {
-        login = "login";
-      }
-      if (cs.email != "" && cs.userKey != "") {
-        console.log("CSDENTRO DEL IF", cs);
+			this.render();
+		}
+		render() {
+			const shadow = this.attachShadow({ mode: "open" });
+			const div = document.createElement("header");
+			let login = "";
+			let email = "";
+			if (cs.email == "" || cs.userKey == "") {
+				login = "login";
+			}
+			if (cs.email != "" && cs.userKey != "") {
+				console.log("CSDENTRO DEL IF", cs);
 
-        email = cs.email;
-        login = "cerrar sesión";
-      }
-      const style = document.createElement("style");
-      div.innerHTML = `
+				email = cs.email;
+				login = "cerrar sesión";
+			}
+			const style = document.createElement("style");
+			div.innerHTML = `
       <div class="ventana"> 
         <button class="boton__cerrar">X</button>
         <div class="ventana__vinculos"> 
@@ -65,7 +65,7 @@ export function init() {
 
 
         `;
-      style.innerHTML = `
+			style.innerHTML = `
 
       .header {
         display: flex;
@@ -279,49 +279,47 @@ export function init() {
           
           `;
 
-      shadow.appendChild(div);
-      shadow.appendChild(style);
-      const inicio = shadow.querySelector("#inicio");
-      const reportPet = shadow.querySelectorAll(".report-pet");
-      const reportedPet = shadow.querySelectorAll(".reported-pet");
-      const misDatos = shadow.querySelectorAll(".mis-datos");
-      const sesion = shadow.querySelectorAll("#cerrar-sesion");
-      sesion.forEach((element) => {
-        element.addEventListener("click", (res) => {
-          let result = window.confirm("Seguro que desea Cerrar sesión?");
-          if (result == true) {
-            cs.userKey = "";
-          }
-        });
-      });
+			shadow.appendChild(div);
+			shadow.appendChild(style);
+			const inicio = shadow.querySelector("#inicio");
+			const reportPet = shadow.querySelectorAll(".report-pet");
+			const reportedPet = shadow.querySelectorAll(".reported-pet");
+			const misDatos = shadow.querySelectorAll(".mis-datos");
+			const sesion = shadow.querySelectorAll("#cerrar-sesion");
+			sesion.forEach((element) => {
+				element.addEventListener("click", (res) => {
+					const event = new CustomEvent("sesion");
+					this.dispatchEvent(event);
+				});
+			});
 
-      inicio.addEventListener("click", (res) => {
-        const event = new CustomEvent("inicio");
-        this.dispatchEvent(event);
-      });
+			inicio.addEventListener("click", (res) => {
+				const event = new CustomEvent("inicio");
+				this.dispatchEvent(event);
+			});
 
-      reportedPet.forEach((element) => {
-        element.addEventListener("click", (res) => {
-          const event = new CustomEvent("reported");
-          this.dispatchEvent(event);
-        });
-      });
-      reportPet.forEach((element) => {
-        element.addEventListener("click", (res) => {
-          const event = new CustomEvent("report");
-          this.dispatchEvent(event);
-        });
-      });
-      misDatos.forEach((element) => {
-        element.addEventListener("click", (res) => {
-          const event = new CustomEvent("misDatos");
-          this.dispatchEvent(event);
-        });
-      });
+			reportedPet.forEach((element) => {
+				element.addEventListener("click", (res) => {
+					const event = new CustomEvent("reported");
+					this.dispatchEvent(event);
+				});
+			});
+			reportPet.forEach((element) => {
+				element.addEventListener("click", (res) => {
+					const event = new CustomEvent("report");
+					this.dispatchEvent(event);
+				});
+			});
+			misDatos.forEach((element) => {
+				element.addEventListener("click", (res) => {
+					const event = new CustomEvent("misDatos");
+					this.dispatchEvent(event);
+				});
+			});
 
-      abrirCerrarVentanas(shadow);
-    }
-  }
+			abrirCerrarVentanas(shadow);
+		}
+	}
 
-  customElements.define("custom-header", Headercustom);
+	customElements.define("custom-header", Headercustom);
 }

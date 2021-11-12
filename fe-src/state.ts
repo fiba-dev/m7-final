@@ -2,7 +2,6 @@ type choose = "piedra" | "papel" | "tijera";
 const pictureUrl = require("url:./components/img/picture.png");
 
 import * as _ from "lodash";
-// import { rtdb } from "./rtdb";
 
 const state = {
 	data: {
@@ -37,15 +36,8 @@ const state = {
 		pets: [],
 	},
 	// init para cuando inicia tome los datos del localstorage
-	init() {
-		const currentGame = this.getState();
-
-		const localData = localStorage.getItem("saved-state");
-
-		if (JSON.parse(localData) != null)
-			currentGame.history = JSON.parse(localData);
-	},
-
+	init() {},
+	//Verifica si es un Email existente
 	validateEmail(callback) {
 		const cs = this.getState();
 
@@ -62,6 +54,7 @@ const state = {
 				if (callback) callback();
 			});
 	},
+	//Crea un usuario
 	createUser(callback) {
 		const cs = this.getState();
 
@@ -83,6 +76,7 @@ const state = {
 				if (callback) callback();
 			});
 	},
+	//Inicia sesion y devuelve un token para identificar al usuario
 	signin(callback) {
 		const cs = this.getState();
 		fetch("/auth/token", {
@@ -100,10 +94,13 @@ const state = {
 			})
 			.then((data) => {
 				if (data == undefined) return false;
+
 				cs.userKey = data.token;
+				state.setState(cs);
 				if (callback) callback();
 			});
 	},
+	//Edita datos del usuario Nombre Email y Password
 	editUser(callback) {
 		const cs = this.getState();
 		const token = "bearer " + cs.userKey;
@@ -126,6 +123,7 @@ const state = {
 				if (callback) callback();
 			});
 	},
+	//Obtiene la pet a travez de la id y la guarda en un objeto pet del State
 	getPet(id, callback) {
 		const cs = this.getState();
 
@@ -143,6 +141,7 @@ const state = {
 
 		if (callback) callback();
 	},
+	//Elimina la publicacion seleccionada
 	deletePet(id, callback) {
 		const cs = this.getState();
 		cs.deleted = false;
@@ -162,6 +161,7 @@ const state = {
 				if (callback) callback();
 			});
 	},
+	//Modifica la publicacion seleccionada Ubicacion Nombre y foto
 	editReportedPet(id, callback) {
 		const cs = this.getState();
 
@@ -204,8 +204,9 @@ const state = {
 						return data;
 					}
 				});
-		} else console.log("Pet Not Found");
+		} else throw "Pet Not Found";
 	},
+	// solicita que le reinicien la password
 	getPassword(callback) {
 		const cs = state.getState();
 		fetch("/user/password" + "?email=" + cs.email, {
@@ -223,20 +224,19 @@ const state = {
 				}
 			});
 	},
+	//Reporta Informacion de la Mascota seleccionada
 	reportPetInfo(callback) {
 		const cs = this.getState();
-		const token = "bearer " + cs.userKey;
+
 		fetch("/user/report-info", {
 			method: "post",
 			headers: {
 				"content-type": "application/json",
-				authorization: token,
 			},
 			body: JSON.stringify({
 				id: cs.petInfo.id,
 				donde: cs.petInfo.donde,
 				name: cs.petInfo.name,
-				email: cs.email,
 				estado: cs.petInfo.estado,
 				telefono: cs.petInfo.telefono,
 			}),
@@ -253,14 +253,13 @@ const state = {
 				}
 			});
 	},
+	//Muestra las mascotas cercanas a la ubicacion del usuario
 	petCercanas(callback) {
 		const cs = this.getState();
-		console.log("csdepetcercanas", cs);
 
-		const token = "bearer " + cs.userKey;
-		fetch("/pets-cerca-de?lat=" + cs.userLat + "&lng=" + cs.userLng, {
+		fetch("/pets-cerca-de" + "?lat=" + cs.userLat + "&lng=" + cs.userLng, {
 			headers: {
-				authorization: token,
+				"content-type": "application/json",
 			},
 		})
 			.then((res) => {
@@ -271,6 +270,7 @@ const state = {
 				if (callback) callback();
 			});
 	},
+	//publica una mascota perdida
 	reportPet(callback) {
 		const cs = this.getState();
 		const token = "bearer " + cs.userKey;
@@ -295,6 +295,7 @@ const state = {
 				if (callback) callback();
 			});
 	},
+	//Obtiene las mascotas reportadas por el usuario
 	getReportedPet(callback) {
 		const cs = this.getState();
 		const token = "bearer " + cs.userKey;

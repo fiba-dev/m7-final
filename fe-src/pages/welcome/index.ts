@@ -7,6 +7,7 @@ import { initRouter } from "../../router";
 import { headerLinks } from "../../components/header/controller";
 import { state } from "../../state";
 import { init } from "../../components/text";
+import { reportinfo } from "../../components/cardNearbyPet/controller";
 
 export function initWelcome(params) {
 	const div = document.createElement("div");
@@ -20,6 +21,7 @@ export function initWelcome(params) {
       <div class="body-intro">
         <h1 class="titulo">Mascotas perdidas cerca tuyo</h1>
         <button-pink class="boton">Dar mi ubicacion</button-pink>
+        <nearby-pet class="pet"></nearby-pet>
       </div>
      
     `;
@@ -44,6 +46,9 @@ body {
   align-content: center;
 
   align-items: center;
+}
+.pet{
+  margin-top:20px;
 }
 .intro {
   min-height: 616px;
@@ -70,13 +75,7 @@ body {
   width: 80vh;
   align-self: center;
 }
-// .main-container {
-//   display: flex;
-//   background-color: white;
-//   flex-direction: column;
-//   flex-wrap: nowrap;
-//   align-items: stretch;
-// }
+
 .titulo {
   height: 200px;
   width: 300px;
@@ -130,26 +129,29 @@ body {
 
 	div.appendChild(style);
 	const header = div.querySelector(".header");
-	header.addEventListener("click", () => {
-		if (cs.userKey == "") {
-			params.goTo("/input-email");
-		}
-	});
+
 	headerLinks(params, div);
 	//boton para navegar a la siguiente pagina donde da instrucciones "/play"
+	const petEl = div.querySelector(".pet");
+	reportinfo(petEl, params);
 	const cs = state.getState();
-	const btn = div.querySelector(".boton");
+	const btn: any = div.querySelector(".boton");
 
-	const map = div.querySelector("#map");
+	if (cs.userLat != "" && cs.userLng != "") {
+		btn.style = "display:none";
+	} else {
+		btn.style = "display:inherit";
+	}
+
 	btn.addEventListener("click", (res) => {
-		Ubicacion();
-		if (cs.userKey != "") {
-			state.petCercanas((res) => {
-				params.goTo("/nearby-pet");
+		navigator.geolocation.getCurrentPosition((res) => {
+			cs.userLat = res.coords.latitude;
+			cs.userLng = res.coords.longitude;
+			state.petCercanas(() => {
+				const listaPets = cs.pets;
+				params.goTo("/welcome");
 			});
-		} else {
-			params.goTo("/input-email");
-		}
+		});
 	});
 
 	return div;

@@ -112,8 +112,10 @@ export function createUser(params) {
 		if (cs.password == cs.passwordTwo) {
 			if (cs.userKey == "") {
 				state.createUser((res) => {
-					params.goTo("/welcome");
-					window.alert("Creado con exito");
+					window.alert("Creado con exito..Logueando");
+					state.signin((res) => {
+						params.goTo("/welcome");
+					});
 				});
 			} else {
 				state.editUser((res) => {

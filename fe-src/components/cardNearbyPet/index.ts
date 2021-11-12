@@ -5,21 +5,21 @@ const imagenURL = require("url:../img/picture.png");
 const lapizURL = require("url:../img/lapiz.png");
 
 export function init() {
-  class cardNearbyPet extends HTMLElement {
-    constructor() {
-      super();
-      this.render();
-    }
+	class cardNearbyPet extends HTMLElement {
+		constructor() {
+			super();
+			this.render();
+		}
 
-    render() {
-      const shadow = this.attachShadow({ mode: "open" });
-      const div = document.createElement("div");
+		render() {
+			const shadow = this.attachShadow({ mode: "open" });
+			const div = document.createElement("div");
 
-      const cs = state.getState();
+			const cs = state.getState();
 
-      const style = document.createElement("style");
+			const style = document.createElement("style");
 
-      div.innerHTML = `
+			div.innerHTML = `
       <div class="ventana"> 
       <button class="boton__cerrar">X</button>
       <form class="ventana__info"> 
@@ -33,6 +33,7 @@ export function init() {
     
     </div>
         <div class="contenedor"></div>
+        <h2 class="no__pets"><h2>
          <template id="card-template">
          <div class="card">
         <a><img class="imagen" src=${imagenURL}></a>
@@ -47,10 +48,16 @@ export function init() {
         </template>
       
       `;
-      style.innerHTML = ` 
+			style.innerHTML = ` 
       .name{
         height: 60px;
         overflow: hidden;
+      }
+      .no__pets{
+        font-family: "Indie Flower";
+        font-size: 60px;
+        color:rgb(241, 196, 255 );
+        text-align: center;
       }
         .card{
             width:335px;
@@ -116,45 +123,46 @@ export function init() {
 
         `;
 
-      const listaPets = cs.pets;
+			const listaPets = cs.pets;
 
-      shadow.appendChild(div);
-      shadow.appendChild(style);
+			shadow.appendChild(div);
+			shadow.appendChild(style);
+			const noPetsEl = shadow.querySelector(".no__pets");
+			if (listaPets.length < 1) {
+				noPetsEl.textContent = "NO HAY PET CERCANAS";
+			} else {
+				noPetsEl.textContent = "";
+				listaPets.forEach((element) => {
+					añadirElementos(div, element);
+				});
+			}
 
-      listaPets.forEach((element) => {
-        añadirElementos(div, element);
-      });
-      const info = shadow.querySelectorAll(".send");
+			const info = shadow.querySelectorAll(".send");
 
-      const nameEl = div.querySelector("#name");
-      nameEl.addEventListener("awesome", (res: any) => {
-        cs.petInfo.name = res.detail.text;
-      });
-      const telefonoEl = div.querySelector("#telefono");
-      telefonoEl.addEventListener("awesome", (res: any) => {
-        cs.petInfo.telefono = res.detail.text;
-      });
-      const dondeEl = div.querySelector("#donde");
-      dondeEl.addEventListener("awesome", (res: any) => {
-        cs.petInfo.donde = res.detail.text;
-      });
-      abrirCerrarVentanas(shadow);
-      info.forEach((element) => {
-        console.log("entre al array", element);
-
-        element.addEventListener("click", (res) => {
-          console.log("soy un click", res);
-          cs.petInfo.id = element.id;
-        });
-      });
-      const botonEl = shadow.querySelector(".boton");
-      botonEl.addEventListener("click", (res) => {
-        console.log("report", res);
-
-        const event = new CustomEvent("info");
-        this.dispatchEvent(event);
-      });
-    }
-  }
-  customElements.define("nearby-pet", cardNearbyPet);
+			const nameEl = div.querySelector("#name");
+			nameEl.addEventListener("awesome", (res: any) => {
+				cs.petInfo.name = res.detail.text;
+			});
+			const telefonoEl = div.querySelector("#telefono");
+			telefonoEl.addEventListener("awesome", (res: any) => {
+				cs.petInfo.telefono = res.detail.text;
+			});
+			const dondeEl = div.querySelector("#donde");
+			dondeEl.addEventListener("awesome", (res: any) => {
+				cs.petInfo.donde = res.detail.text;
+			});
+			abrirCerrarVentanas(shadow);
+			info.forEach((element) => {
+				element.addEventListener("click", (res) => {
+					cs.petInfo.id = element.id;
+				});
+			});
+			const botonEl = shadow.querySelector(".boton");
+			botonEl.addEventListener("click", (res) => {
+				const event = new CustomEvent("info");
+				this.dispatchEvent(event);
+			});
+		}
+	}
+	customElements.define("nearby-pet", cardNearbyPet);
 }

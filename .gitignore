@@ -5,3 +5,4 @@ algolia.env
 dist
 .parcel-cache
 node_modules
+.env

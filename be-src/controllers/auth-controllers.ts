@@ -9,9 +9,7 @@ function getSHA256ofString(text: string) {
 }
 //Actualiza el Auth
 export async function updateAuth(userId, updateData) {
-	console.log("auth", updateData, userId);
 	if (updateData.email && updateData.password && userId) {
-		console.log("Entro al if");
 		const passwordHasheado = getSHA256ofString(updateData.password);
 		const updateDataComplete = {
 			user_id: userId,
@@ -21,7 +19,7 @@ export async function updateAuth(userId, updateData) {
 		await Auth.update(updateDataComplete, { where: { user_id: userId } });
 		return updateDataComplete;
 	} else {
-		console.log("Faltan Datos del auth", updateData);
+		return "Faltan Datos del auth";
 	}
 }
 //Crea Auth
@@ -59,7 +57,6 @@ export async function getPassword(id) {
 	const auth: any = await Auth.findOne({
 		where: { id: id },
 	});
-	console.log("este es uath", auth);
 
 	if (auth) {
 		const password = getSHA256ofString(auth.password);
@@ -70,9 +67,7 @@ export async function getPassword(id) {
 export async function updatePassword(user) {
 	let newPassword = 10000 + Math.floor(Math.random() * 99999).toString();
 
-	console.log("auth", user, newPassword);
 	if (user.email && newPassword && user.id) {
-		console.log("Entro al if");
 		const passwordHasheado = getSHA256ofString(newPassword);
 		const updateDataComplete = {
 			user_id: user.id,
@@ -82,6 +77,6 @@ export async function updatePassword(user) {
 		await Auth.update(updateDataComplete, { where: { user_id: user.id } });
 		return newPassword;
 	} else {
-		console.log("Faltan Datos del auth", user);
+		throw "Faltan Datos del auth";
 	}
 }

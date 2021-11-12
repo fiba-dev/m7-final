@@ -99,12 +99,7 @@ export function inputEmail(params) {
 	input.addEventListener("awesome", (res: any) => {
 		cs.email = res.detail.text;
 	});
-	const header = div.querySelector(".header");
-	header.addEventListener("click", () => {
-		if (cs.userKey == "") {
-			params.goTo("/input-email");
-		}
-	});
+
 	btn.addEventListener("click", (boton1) => {
 		state.validateEmail((res) => {
 			if (cs.emailCheck == true) params.goTo("/input-password");
