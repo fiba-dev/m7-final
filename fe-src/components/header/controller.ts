@@ -1,4 +1,5 @@
 import { state } from "../../state";
+
 import { initRouter } from "../../router";
 
 //funcion que contiene los link de redireccionamiento del header
@@ -18,7 +19,9 @@ export function headerLinks(params, div) {
 		}
 	});
 	header.addEventListener("inicio", (res) => {
-		params.goTo("/welcome");
+		state.petCercanas(() => {
+			params.goTo("/welcome");
+		});
 	});
 
 	header.addEventListener("report", (res) => {
