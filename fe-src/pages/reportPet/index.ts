@@ -27,9 +27,7 @@ export function reportPet(params) {
 
 	style.innerHTML = ` 
 
-  * {
-  box-sizing: border-box;
-}
+ 
 .boton-gris{
       
   font-family: "Indie Flower";

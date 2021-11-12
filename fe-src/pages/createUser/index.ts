@@ -6,7 +6,7 @@ export function createUser(params) {
 	const div = document.createElement("div");
 	const style = document.createElement("style");
 	const cs = state.getState();
-
+	div.className = "intro";
 	//html
 	div.innerHTML = `
   <custom-header class="header"></custom-header>
@@ -20,6 +20,9 @@ export function createUser(params) {
   `;
 	//style
 	style.innerHTML = ` 
+  body {
+    margin: 0px;
+  }
   .body-intro {
     display: flex;
     flex-direction: column;
@@ -33,7 +36,7 @@ export function createUser(params) {
   }
   .intro {
     min-height: 616px;
-    height: 100vh;
+   
     background-color: white;
     display: flex;
     flex-direction: column;

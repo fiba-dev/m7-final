@@ -268,6 +268,7 @@ const state = {
 			.then((data) => {
 				cs.pets = data;
 				if (callback) callback();
+				return data;
 			});
 	},
 	//publica una mascota perdida

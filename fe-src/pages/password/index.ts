@@ -7,6 +7,7 @@ export function inputPassword(params) {
 	const style = document.createElement("style");
 	const cs = state.getState();
 	//html
+	div.className = "intro";
 	div.innerHTML = `
   <custom-header class="header"></custom-header>
 
@@ -21,7 +22,12 @@ export function inputPassword(params) {
     
     `;
 	//style
-	style.innerHTML = ` .body-intro {
+	style.innerHTML = ` 
+  body {
+    margin: 0px;
+  }
+  
+  .body-intro {
   
     display: flex;
     flex-direction: column;
@@ -37,7 +43,7 @@ export function inputPassword(params) {
   }
   .intro {
     min-height: 616px;
-    height: 100vh;
+    
     background-color: white;
     display: flex;
     flex-direction: column;

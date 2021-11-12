@@ -30,12 +30,8 @@ export function editPet(params) {
 
 	style.innerHTML = ` 
     
-  * {
-  box-sizing: border-box;
-}
-body {
-  margin: 0px;
-}
+ 
+
 .texto{
     margin-top:5px;
     width:320px;
@@ -77,7 +73,7 @@ body {
 }
 .intro {
   min-height: 616px;
-  height: 100vh;
+  
   background-color: white;
   display: flex;
   flex-direction: column;

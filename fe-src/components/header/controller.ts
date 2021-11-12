@@ -19,9 +19,14 @@ export function headerLinks(params, div) {
 		}
 	});
 	header.addEventListener("inicio", (res) => {
-		state.petCercanas(() => {
+		if (cs.userLat != "" && cs.userLng != "") {
+			state.petCercanas(() => {
+				params.goTo("/welcome");
+			});
+		} else {
+			cs.pets = [];
 			params.goTo("/welcome");
-		});
+		}
 	});
 
 	header.addEventListener("report", (res) => {

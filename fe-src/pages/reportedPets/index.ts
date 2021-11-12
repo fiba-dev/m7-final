@@ -30,9 +30,6 @@ export function reportedPet(params) {
 
 	style.innerHTML = ` 
 
-  * {
-  box-sizing: border-box;
-}
 body {
   margin: 0px;
 }
@@ -50,7 +47,7 @@ body {
 }
 .intro {
   min-height: 616px;
-  height: 100vh;
+  
   background-color: white;
   display: flex;
   flex-direction: column;

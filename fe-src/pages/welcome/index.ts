@@ -29,9 +29,7 @@ export function initWelcome(params) {
 
 	style.innerHTML = ` 
     
-  * {
-  box-sizing: border-box;
-}
+
 body {
   margin: 0px;
 }
@@ -103,7 +101,7 @@ body {
     justify-content: space-between;
     justify-content: center;
     flex-direction: column;
-    height: 100vh;
+    
     align-self: inherit;
     align-items: center;
 
