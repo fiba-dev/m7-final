@@ -13,7 +13,8 @@ export function headerLinks(params, div) {
 		} else {
 			let result = window.confirm("Seguro que desea Cerrar sesión?");
 			if (result == true) {
-				cs.userKey = "";
+				state.cerrarSesion();
+
 				params.goTo("/welcome");
 			}
 		}

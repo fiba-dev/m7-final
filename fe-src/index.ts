@@ -7,10 +7,11 @@ import { init as PutPicture } from "./components/putImage";
 import { init as PutLocation } from "./components/map";
 import { init as reportedPet } from "./components/cardMyReportedPet";
 import { init as nearbyPet } from "./components/cardNearbyPet";
+import { state } from "./state";
 
 (function () {
 	const root = document.querySelector(".root");
-
+	state.init();
 	input();
 	initRouter(root);
 	nearbyPet();

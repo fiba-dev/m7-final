@@ -5,7 +5,7 @@ export async function searchPet(data) {
 
 	const { hits } = await index.search("", {
 		aroundLatLng: [lat, lng].join(","),
-		aroundRadius: 100000,
+		aroundRadius: 20000,
 	});
 	return hits;
 }

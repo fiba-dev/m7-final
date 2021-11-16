@@ -1,6 +1,3 @@
-type choose = "piedra" | "papel" | "tijera";
-const pictureUrl = require("url:./components/img/picture.png");
-
 import * as _ from "lodash";
 
 const state = {
@@ -36,7 +33,12 @@ const state = {
 		pets: [],
 	},
 	// init para cuando inicia tome los datos del localstorage
-	init() {},
+	init() {
+		const currentState: any = JSON.parse(localStorage.getItem("state"));
+
+		console.log("soy el localstorage", currentState);
+		if (currentState) state.setUser(currentState);
+	},
 	//Verifica si es un Email existente
 	validateEmail(callback) {
 		const cs = this.getState();
@@ -96,7 +98,7 @@ const state = {
 				if (data == undefined) return false;
 
 				cs.userKey = data.token;
-				state.setState(cs);
+				state.saveToken(cs);
 				if (callback) callback();
 			});
 	},
@@ -320,8 +322,18 @@ const state = {
 	},
 	setState(newState) {
 		this.data = newState;
-
-		localStorage.setItem("state", JSON.stringify(newState));
+	},
+	setUser(user) {
+		(this.data.fullName = user.fullName),
+			(this.data.userKey = user.userKey),
+			(this.data.email = user.email);
+	},
+	saveToken(state) {
+		localStorage.setItem("state", JSON.stringify(state));
+	},
+	cerrarSesion() {
+		this.data.userKey = "";
+		localStorage.removeItem("state");
 	},
 };
 

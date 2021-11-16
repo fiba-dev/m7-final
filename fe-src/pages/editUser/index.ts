@@ -94,7 +94,7 @@ export function editUser(params) {
       justify-content: space-between;
       justify-content: center;
       flex-direction: column;
-      height: 100vh;
+      
       align-self: inherit;
       align-items: center;
   
