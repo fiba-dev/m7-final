@@ -4,6 +4,7 @@ import { initRouter } from "../../router";
 import { abrirCerrarVentanas } from "./controller";
 
 const garraURL = require("url:../img/garra.png");
+const garra2URL = require("url:../img/garra2.png");
 export function init() {
 	const cs = state.getState();
 
@@ -40,8 +41,8 @@ export function init() {
       </div>
  <div class="header" >  
  <div id="inicio" class="inicio">
- <img src=${garraURL} class="header__logo">
-<a id="inicio"  class="header__incio">Inicio</a>
+ <div  class="header__logo"></div>
+
 </div>
  
    <div class="header__vinculos"> 
@@ -78,21 +79,35 @@ export function init() {
         color:rgb(241, 196, 255 );
 
       }
+      .violeta:hover{
+        color:black;
+        background:rgb(241, 196, 255 );
+        border-radius: 5px;
+      }
       .rosa{
         color:rgba(255, 157, 245, 1);
+      }
+      .rosa:hover{
+        color:black;
+        background:rgba(255, 157, 245, 1);
+        border-radius: 5px;
       }
       .violeta2{
        color:rgba(184, 47, 236 );
       }
+      .violeta2:hover{
+        background:rgba(184, 47, 236 );
+        color:black;
+        border-radius: 5px;
+
+       }
       .ventana__email{
         font-family: 'Indie Flower';
         font-size: 30px;
+
       }
      
-      .inicio {
-        display: flex;
-        flex-direction: column;
-      }
+    
       .header__incio {
         text-decoration: none;
         margin-left: 17px;
@@ -103,14 +118,24 @@ export function init() {
       }
       
       .header__logo {
-        width: 40px;
-        height: 40px;
-        font-size: 38px;
+        background-image:url(${garraURL});
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        width: 50px;
+        height: 50px;
         font-family: "Indie Flower";
-      
-        align-items: center;
-        margin-top: 18px;
+        border-radius: 5px;
+        
         margin-left: 17px;
+      }
+      .header__logo:hover{
+        
+        
+        border-radius: 5px;
+      
+        background-image:url(${garra2URL});
+        background-color: rgba(255, 157, 245);
       }
       .header__label {
         display: none;
@@ -132,13 +157,13 @@ export function init() {
       
       .header__menu-button {
         border: none;
-      
+        color:rgba(255, 157, 245);
         background: none;
         font-family: "Indie Flower";
         height: 100px;
         width: 100px;
         font-size: 40px;
-        margin-top: 20px;
+        margin-top: 10px;
         margin-right: 20px;
       }
       .ventana {
@@ -206,7 +231,7 @@ export function init() {
           width: 60px;
           height: 60px;
           align-items: center;
-          margin-top: 36px;
+         
         
         }
         .header {
