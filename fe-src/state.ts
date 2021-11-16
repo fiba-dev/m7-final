@@ -36,7 +36,6 @@ const state = {
 	init() {
 		const currentState: any = JSON.parse(localStorage.getItem("state"));
 
-		console.log("soy el localstorage", currentState);
 		if (currentState) state.setUser(currentState);
 	},
 	//Verifica si es un Email existente

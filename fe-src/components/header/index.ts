@@ -22,8 +22,6 @@ export function init() {
 				login = "login";
 			}
 			if (cs.email != "" && cs.userKey != "") {
-				console.log("CSDENTRO DEL IF", cs);
-
 				email = cs.email;
 				login = "cerrar sesión";
 			}
