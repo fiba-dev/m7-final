@@ -35,10 +35,10 @@ import {
 	sendEmailNewPassword,
 	sendEmailPetInfo,
 } from "./controllers/sengrid-controllers";
-
+let cors= require("cors")
 const app = express();
 app.use(express.static("dist"));
-
+app.use(cors())
 const port = process.env.PORT || 3003;
 const secret = "hola a todos";
 app.use(express.json({ limit: "50mb" }));
