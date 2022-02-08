@@ -35,10 +35,10 @@ import {
 	sendEmailNewPassword,
 	sendEmailPetInfo,
 } from "./controllers/sengrid-controllers";
-let cors= require("cors")
+
 const app = express();
 app.use(express.static("dist"));
-app.use(cors())
+
 const port = process.env.PORT || 3003;
 const secret = "hola a todos";
 app.use(express.json({ limit: "50mb" }));
@@ -47,7 +47,7 @@ const result = dotenv.config();
 
 //email check---------
 
-app.get("/email", cors(),async (req, res) => {
+app.get("/email",async (req, res) => {
 	const email = req.query.email;
 
 	const validate = await checkEmail(email);
