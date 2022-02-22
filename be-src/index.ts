@@ -34,11 +34,12 @@ import { searchPet, algoliaPet } from "./controllers/algolia-controllers";
 import {
 	sendEmailNewPassword,
 	sendEmailPetInfo,
+	contacto,
 } from "./controllers/sengrid-controllers";
-let cors= require("cors")
+let cors = require("cors");
 const app = express();
 app.use(express.static("dist"));
-app.use(cors())
+app.use(cors());
 const port = process.env.PORT || 3003;
 const secret = "hola a todos";
 app.use(express.json({ limit: "50mb" }));
@@ -47,7 +48,7 @@ const result = dotenv.config();
 
 //email check---------
 
-app.get("/email",async (req, res) => {
+app.get("/email", async (req, res) => {
 	const email = req.query.email;
 
 	const validate = await checkEmail(email);
@@ -116,6 +117,14 @@ app.post("/user/report-info", async (req, res) => {
 	} else {
 		res.json("EMAIL NOT FOUND");
 	}
+});
+app.post("/contact", async (req, res) => {
+	console.log("soy req.body", req.body);
+
+	const email = await contacto(req.body);
+	console.log("Soy email", email);
+
+	res.json(email);
 });
 //Mascotas Reportadas por mi---------
 app.get("/me/reported", authMiddleware, async (req, res) => {
